@@ -22,17 +22,25 @@ body {
 
   z-index: 1000;
 }
+
+/* 로그인 버튼 오른쪽 끝 고정 */
+.gnb-inner .login {
+  margin-left: auto;
+}
+
+@media (max-width: 767px) {
+  .gnb-nav {
+    display: none;
+  }
+}
 .gnb-inner {
   max-width: 1920px;
   height: 100%;
-
   margin: 0 auto;
   padding: 9px 200px;
-
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start; /* space-between → flex-start */
   align-items: center;
-
   box-sizing: border-box;
 }
 

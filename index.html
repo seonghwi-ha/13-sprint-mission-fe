@@ -2,10 +2,12 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
+    <script type="module" src="../js/main.js"></script>
     <title>판다마켓</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./css/style.css" />
     <link rel="stylesheet" href="./css/reset.css" />
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./css/gnb-nav.css" />
   </head>
 
   <body>
@@ -16,6 +18,13 @@
             <img src="image/panda.png" alt="판다마켓" />
           </a>
         </div>
+
+        <!-- 네비게이션 링크 추가 -->
+        <nav class="gnb-nav">
+          <a href="community.html" class="gnb-nav-link">자유게시판</a>
+          <a href="items.html" class="gnb-nav-link">중고마켓</a>
+        </nav>
+
         <button class="login" onclick="location.href = 'login.html'">
           로그인
         </button>
@@ -86,6 +95,7 @@
         </div>
       </div>
     </div>
+
     <div class="sub-content4">
       <div class="sub-content4-inner">
         <div class="sub4-img"></div>
@@ -94,19 +104,15 @@
         </div>
       </div>
     </div>
+
     <footer class="footer">
-      <!-- 왼쪽 로고 -->
       <div class="footer-left" onclick="location.href = 'index.html'">
         codeit-2024
       </div>
-
-      <!-- 중앙 링크 -->
       <div class="footer-center">
         <a href="privacy.html">Privacy Policy</a>
         <a href="faq.html">FAQ</a>
       </div>
-
-      <!-- 오른쪽 SNS 아이콘 -->
       <div class="footer-right">
         <a
           href="https://www.facebook.com"
