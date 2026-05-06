@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>회원가입</title>
+    <link rel="stylesheet" href="./css/style.css" />
+
+    <script>
+      function togglePassword(el) {
+        const input = el.previousElementSibling;
+        input.type = input.type === "password" ? "text" : "password";
+      }
+    </script>
+  </head>
+
+  <body class="signup-page">
+    <div class="signup-container">
+      <!-- 상단 로고 영역 -->
+      <div class="logo-wrapper">
+        <div class="logo">
+          <a href="/">
+            <img src="./image/판다 얼굴.png" alt="Panda Logo" />
+            <span>판다마켓</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 회원가입 박스 -->
+      <div
+        class="signup-inner-box"
+        style="
+          width: 640px;
+          height: 670px;
+          display: flex;
+          flex-direction: column;
+          gap: 24px;
+        "
+      >
+        <!-- 이메일 -->
+        <div class="input-group email-group">
+          <label for="email">이메일</label>
+          <input type="email" id="email" placeholder="이메일을 입력해주세요" />
+        </div>
+
+        <!-- 닉네임 -->
+        <div class="input-group nickname-group">
+          <label for="nickname">닉네임</label>
+          <input
+            type="text"
+            id="nickname"
+            placeholder="닉네임을 입력해주세요"
+          />
+        </div>
+
+        <!-- 비밀번호 -->
+        <div class="input-group password-group">
+          <label for="password">비밀번호</label>
+          <div class="password-wrapper">
+            <input
+              type="password"
+              id="password"
+              placeholder="비밀번호를 입력해주세요"
+            />
+            <button
+              type="button"
+              class="toggle-password"
+              onclick="togglePassword(this)"
+            >
+              <img src="./image/눈.png" alt="Toggle" />
+            </button>
+          </div>
+        </div>
+
+        <!-- 비밀번호 확인 -->
+        <div class="input-group password-check-group">
+          <label for="password-check">비밀번호 확인</label>
+          <div class="password-wrapper">
+            <input
+              type="password"
+              id="password-check"
+              placeholder="비밀번호를 다시 입력해주세요"
+            />
+            <button
+              type="button"
+              class="toggle-password"
+              onclick="togglePassword(this)"
+            >
+              <img src="./image/눈.png" alt="Toggle" />
+            </button>
+          </div>
+        </div>
+
+        <!-- 회원가입 버튼 -->
+        <button class="signup-btn">회원가입</button>
+
+        <!-- 간편 로그인 박스 -->
+        <div
+          class="easy-login"
+          style="
+            width: 640px;
+            height: 74px;
+            padding: 16px 23px;
+            border-radius: 8px;
+          "
+        >
+          <div
+            class="easy-login-inner"
+            style="
+              width: 594px;
+              height: 42px;
+              display: flex;
+              justify-content: space-between;
+            "
+          >
+            <span>간편 로그인하기</span>
+            <div class="sns-icons">
+              <a href="https://www.google.com/" target="_blank">
+                <img src="./image/구글.png" alt="Google" />
+              </a>
+              <a href="https://www.kakaocorp.com/page/" target="_blank">
+                <img src="./image/카카오.png" alt="Kakao" />
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 로그인 링크 -->
+        <div class="login-link">
+          이미 회원이신가요?
+          <a href="./login.html">로그인</a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

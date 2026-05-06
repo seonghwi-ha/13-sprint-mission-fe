@@ -1,0 +1,617 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>중고마켓 - 판다마켓</title>
+    <link rel="stylesheet" href="./css/reset.css" />
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./css/gnb-nav.css" />
+    <style>
+      /* ── 중고마켓 전용 스타일 ── */
+      .market-wrap {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 32px 24px;
+      }
+
+      /* 섹션 타이틀 */
+      .section-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: #1c1c1c;
+        margin-bottom: 20px;
+      }
+
+      /* ── 베스트 상품 그리드 ── */
+      .best-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 48px;
+      }
+
+      /* ── 판매 헤더 ── */
+      .sale-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+      .sale-controls {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .search-box {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: #f9f9f9;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 0 14px;
+        height: 40px;
+        min-width: 200px;
+      }
+      .search-box:focus-within {
+        border-color: #3692ff;
+      }
+      .search-box svg {
+        flex-shrink: 0;
+      }
+      .search-box input {
+        border: none;
+        background: none;
+        outline: none;
+        font-size: 14px;
+        color: #1c1c1c;
+        width: 100%;
+      }
+      .search-box input::placeholder {
+        color: #9ca3af;
+      }
+
+      .btn-register {
+        height: 40px;
+        padding: 0 20px;
+        background: #3692ff;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      .btn-register:hover {
+        background: #1877f2;
+      }
+
+      /* 드롭다운 */
+      .sort-wrapper {
+        position: relative;
+      }
+      .sort-select {
+        height: 40px;
+        padding: 0 36px 0 14px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        background: white;
+        font-size: 14px;
+        color: #1c1c1c;
+        outline: none;
+        appearance: none;
+        cursor: pointer;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='%236B7280'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+      }
+      .sort-select:focus {
+        border-color: #3692ff;
+      }
+
+      /* ── 상품 그리드 ── */
+      .sale-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 16px;
+      }
+
+      /* ── 상품 카드 ── */
+      .product-card {
+        background: white;
+        border-radius: 12px;
+        border: 1px solid #e5e7eb;
+        overflow: hidden;
+        cursor: pointer;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+      .product-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      }
+      .product-card-img {
+        width: 100%;
+        aspect-ratio: 1;
+        object-fit: cover;
+        background: #f0f0f0;
+        display: block;
+      }
+      .product-card-body {
+        padding: 12px;
+      }
+      .product-card-name {
+        font-size: 14px;
+        font-weight: 500;
+        color: #1c1c1c;
+        margin-bottom: 6px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .product-card-price {
+        font-size: 16px;
+        font-weight: 700;
+        color: #1c1c1c;
+        margin-bottom: 8px;
+      }
+      .product-card-meta {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 12px;
+        color: #9ca3af;
+      }
+      .heart-icon {
+        color: #ff6b6b;
+        font-size: 12px;
+      }
+
+      /* BEST 뱃지 */
+      .badge-best {
+        display: inline-block;
+        background: #3692ff;
+        color: white;
+        font-size: 11px;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 4px;
+        margin-bottom: 6px;
+      }
+
+      /* ── 로딩 스켈레톤 ── */
+      .skeleton {
+        background: linear-gradient(
+          90deg,
+          #f0f0f0 25%,
+          #e0e0e0 50%,
+          #f0f0f0 75%
+        );
+        background-size: 200% 100%;
+        animation: shimmer 1.5s infinite;
+        border-radius: 8px;
+      }
+      @keyframes shimmer {
+        0% {
+          background-position: 200% 0;
+        }
+        100% {
+          background-position: -200% 0;
+        }
+      }
+      .skeleton-card {
+        background: white;
+        border-radius: 12px;
+        border: 1px solid #e5e7eb;
+        overflow: hidden;
+      }
+      .skeleton-img {
+        width: 100%;
+        aspect-ratio: 1;
+        border-radius: 0;
+      }
+      .skeleton-body {
+        padding: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .skeleton-line {
+        height: 14px;
+      }
+      .skeleton-line.short {
+        width: 60%;
+      }
+      .skeleton-line.price {
+        height: 18px;
+        width: 50%;
+      }
+
+      /* ── 페이지네이션 ── */
+      .pagination {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        margin-top: 32px;
+      }
+      .page-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        border: 1px solid #e5e7eb;
+        background: white;
+        font-size: 14px;
+        cursor: pointer;
+        color: #6b7280;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+      }
+      .page-btn:hover:not(:disabled) {
+        border-color: #3692ff;
+        color: #3692ff;
+      }
+      .page-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+      .page-btn.active {
+        background: #3692ff;
+        color: white;
+        border-color: #3692ff;
+        font-weight: 600;
+      }
+
+      /* ── 빈 상태 ── */
+      .empty-state {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 60px 20px;
+        color: #9ca3af;
+        font-size: 16px;
+      }
+
+      /* ── 반응형 ── */
+      @media (max-width: 1199px) {
+        .best-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .sale-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+      @media (max-width: 767px) {
+        .market-wrap {
+          padding: 20px 16px;
+        }
+        .best-grid {
+          grid-template-columns: repeat(1, 1fr);
+          gap: 12px;
+        }
+        .sale-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 12px;
+        }
+        .sale-header {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        .sale-controls {
+          width: 100%;
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .search-box {
+          min-width: 0;
+        }
+        .btn-register {
+          width: 100%;
+          text-align: center;
+        }
+        .sort-select {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 네비게이션 -->
+    <header class="gnb">
+      <div class="gnb-inner">
+        <div class="logo">
+          <a href="index.html">
+            <img src="image/panda.png" alt="판다마켓" />
+          </a>
+        </div>
+        <nav class="gnb-nav">
+          <a href="community.html" class="gnb-nav-link">자유게시판</a>
+          <a href="items.html" class="gnb-nav-link active">중고마켓</a>
+        </nav>
+        <button class="login" onclick="location.href = 'login.html'">
+          로그인
+        </button>
+      </div>
+    </header>
+
+    <!-- 중고마켓 본문 -->
+    <main class="market-wrap">
+      <!-- 베스트 상품 -->
+      <section>
+        <h2 class="section-title">베스트 상품</h2>
+        <div class="best-grid" id="best-grid">
+          <!-- JS로 렌더링 -->
+        </div>
+      </section>
+
+      <!-- 판매 중인 상품 -->
+      <section>
+        <div class="sale-header">
+          <h2 class="section-title" style="margin-bottom: 0">판매 중인 상품</h2>
+          <div class="sale-controls">
+            <div class="search-box">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="#9ca3af">
+                <path
+                  d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+                />
+              </svg>
+              <input
+                type="text"
+                id="search-input"
+                placeholder="검색할 상품을 입력해주세요"
+              />
+            </div>
+            <button class="btn-register">상품 등록하기</button>
+            <select class="sort-select" id="sort-select">
+              <option value="recent">최신 순</option>
+              <option value="favorite">좋아요 순</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="sale-grid" id="sale-grid">
+          <!-- JS로 렌더링 -->
+        </div>
+
+        <div class="pagination" id="pagination"></div>
+      </section>
+    </main>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+      <div class="footer-left" onclick="location.href = 'index.html'">
+        codeit-2024
+      </div>
+      <div class="footer-center">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="faq.html">FAQ</a>
+      </div>
+      <div class="footer-right">
+        <a
+          href="https://www.facebook.com"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img src="image/facebook.png" alt="Facebook" />
+        </a>
+        <a
+          href="https://www.twitter.com"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img src="image/twitter.png" alt="Twitter" />
+        </a>
+        <a
+          href="https://www.youtube.com"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img src="image/youtube.png" alt="YouTube" />
+        </a>
+        <a
+          href="https://www.instagram.com"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img src="image/instagram.png" alt="Instagram" />
+        </a>
+      </div>
+    </footer>
+
+    <script>
+      const API_BASE = "https://panda-market-api.vercel.app";
+
+      // ── 반응형 pageSize 계산 ──────────────────────────
+      function getPageSize(type) {
+        const w = window.innerWidth;
+        if (type === "best") {
+          if (w <= 767) return 1;
+          if (w <= 1199) return 2;
+          return 4;
+        }
+        if (w <= 767) return 4;
+        if (w <= 1199) return 6;
+        return 10;
+      }
+
+      // ── 가격 포맷 ─────────────────────────────────────
+      function formatPrice(price) {
+        return (price ?? 0).toLocaleString("ko-KR") + "원";
+      }
+
+      // ── 스켈레톤 카드 HTML ────────────────────────────
+      function skeletonHTML() {
+        return `
+        <div class="skeleton-card">
+          <div class="skeleton skeleton-img"></div>
+          <div class="skeleton-body">
+            <div class="skeleton skeleton-line"></div>
+            <div class="skeleton skeleton-line short"></div>
+            <div class="skeleton skeleton-line price"></div>
+          </div>
+        </div>`;
+      }
+
+      // ── 상품 카드 HTML ────────────────────────────────
+      function productCardHTML(product, isBest) {
+        const img =
+          product.images?.[0] ||
+          "https://placehold.co/300x300/f0f0f0/999?text=No+Image";
+        return `
+        <div class="product-card">
+          <img class="product-card-img" src="${img}" alt="${product.name}"
+            onerror="this.src='https://placehold.co/300x300/f0f0f0/999?text=No+Image'" />
+          <div class="product-card-body">
+            ${isBest ? '<span class="badge-best">BEST</span>' : ""}
+            <p class="product-card-name">${product.name}</p>
+            <p class="product-card-price">${formatPrice(product.price)}</p>
+            <div class="product-card-meta">
+              <span class="heart-icon">♥</span>
+              <span>${product.favoriteCount ?? 0}</span>
+            </div>
+          </div>
+        </div>`;
+      }
+
+      // ── 베스트 상품 렌더 ──────────────────────────────
+      function renderBest() {
+        const grid = document.getElementById("best-grid");
+        const size = getPageSize("best");
+        grid.innerHTML = Array(size).fill(skeletonHTML()).join("");
+
+        fetch(`${API_BASE}/products?page=1&pageSize=${size}&orderBy=favorite`)
+          .then((res) => {
+            if (!res.ok) throw new Error(res.status);
+            return res.json();
+          })
+          .then((data) => {
+            const list = data.list || [];
+            grid.innerHTML = list.length
+              ? list.map((p) => productCardHTML(p, true)).join("")
+              : '<p style="color:#9ca3af">베스트 상품이 없습니다.</p>';
+          })
+          .catch((err) => {
+            console.error("베스트 상품 오류:", err);
+            grid.innerHTML =
+              '<p style="color:#ef4444">데이터를 불러오지 못했습니다.</p>';
+          });
+      }
+
+      // ── 판매 상품 상태 ────────────────────────────────
+      let currentPage = 1;
+      let currentOrder = "recent";
+      let currentKeyword = "";
+      let searchTimer = null;
+      let totalPages = 1;
+
+      // ── 판매 상품 렌더 ────────────────────────────────
+      function renderSale() {
+        const grid = document.getElementById("sale-grid");
+        const size = getPageSize("sale");
+        grid.innerHTML = Array(size).fill(skeletonHTML()).join("");
+
+        const params = new URLSearchParams({
+          page: currentPage,
+          pageSize: size,
+          orderBy: currentOrder,
+        });
+        if (currentKeyword) params.append("keyword", currentKeyword);
+
+        fetch(`${API_BASE}/products?${params}`)
+          .then((res) => {
+            if (!res.ok) throw new Error(res.status);
+            return res.json();
+          })
+          .then((data) => {
+            const list = data.list || [];
+            totalPages = Math.max(1, Math.ceil((data.totalCount || 0) / size));
+
+            grid.innerHTML = list.length
+              ? list.map((p) => productCardHTML(p, false)).join("")
+              : '<div class="empty-state">🔍 검색 결과가 없습니다.</div>';
+
+            renderPagination();
+          })
+          .catch((err) => {
+            console.error("판매 상품 오류:", err);
+            grid.innerHTML =
+              '<div class="empty-state" style="color:#ef4444">데이터를 불러오지 못했습니다.</div>';
+          });
+      }
+
+      // ── 페이지네이션 렌더 ─────────────────────────────
+      function renderPagination() {
+        const wrap = document.getElementById("pagination");
+        if (totalPages <= 1) {
+          wrap.innerHTML = "";
+          return;
+        }
+
+        const RANGE = 5;
+        let start = Math.max(1, currentPage - 2);
+        let end = Math.min(totalPages, start + RANGE - 1);
+        if (end - start < RANGE - 1) start = Math.max(1, end - RANGE + 1);
+
+        let html = `<button class="page-btn" ${currentPage === 1 ? "disabled" : ""}
+        onclick="goPage(${currentPage - 1})">‹</button>`;
+
+        for (let i = start; i <= end; i++) {
+          html += `<button class="page-btn ${i === currentPage ? "active" : ""}"
+          onclick="goPage(${i})">${i}</button>`;
+        }
+
+        html += `<button class="page-btn" ${currentPage === totalPages ? "disabled" : ""}
+        onclick="goPage(${currentPage + 1})">›</button>`;
+
+        wrap.innerHTML = html;
+      }
+
+      function goPage(n) {
+        currentPage = n;
+        renderSale();
+      }
+
+      // ── 이벤트 ───────────────────────────────────────
+      document
+        .getElementById("search-input")
+        .addEventListener("input", function () {
+          clearTimeout(searchTimer);
+          searchTimer = setTimeout(() => {
+            currentKeyword = this.value.trim();
+            currentPage = 1;
+            renderSale();
+          }, 400);
+        });
+
+      document
+        .getElementById("sort-select")
+        .addEventListener("change", function () {
+          currentOrder = this.value;
+          currentPage = 1;
+          renderSale();
+        });
+
+      // 반응형: 창 크기 바뀌면 재렌더
+      let resizeTimer = null;
+      window.addEventListener("resize", () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          currentPage = 1;
+          renderBest();
+          renderSale();
+        }, 300);
+      });
+
+      // ── 초기 렌더 ─────────────────────────────────────
+      renderBest();
+      renderSale();
+    </script>
+  </body>
+</html>
