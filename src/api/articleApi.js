@@ -1,10 +1,17 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL;
+
+function getToken() {
+  if (typeof window === "undefined") return null;
+  return localStorage.getItem("accessToken");
+}
 
 async function request(path, options) {
+  const token = getToken();
   const res = await fetch(`${API_BASE}${path}`, {
     ...options,
     headers: {
       "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...options?.headers,
     },
   });
@@ -20,14 +27,19 @@ async function request(path, options) {
   return data;
 }
 
-export async function getArticles({ page = 1, limit = 10, keyword = "", sort = "recent" } = {}) {
+export async function getArticles({
+  page = 1,
+  limit = 10,
+  keyword = "",
+  sort = "recent",
+} = {}) {
   const params = new URLSearchParams({ page, limit, sort });
   if (keyword) params.append("keyword", keyword);
   return request(`/articles?${params}`);
 }
 
 export async function getBestArticles() {
-  return request("/articles?page=1&limit=3&sort=recent");
+  return request("/articles?page=1&limit=3&sort=like");
 }
 
 export async function getArticle(id) {
@@ -66,12 +78,12 @@ export async function createComment(articleId, content) {
 }
 
 export async function updateComment(commentId, content) {
-  return request(`/comments/articles/${commentId}`, {
+  return request(`/comments/${commentId}`, {
     method: "PATCH",
     body: JSON.stringify({ content }),
   });
 }
 
 export async function deleteComment(commentId) {
-  return request(`/comments/articles/${commentId}`, { method: "DELETE" });
+  return request(`/comments/${commentId}`, { method: "DELETE" });
 }
