@@ -1,52 +1,35 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
+import { useQuery } from "@tanstack/react-query";
 import { getArticles, getBestArticles } from "../../src/api/articleApi";
 import ArticleCard from "../../src/components/ArticleCard";
 import BestArticles from "../../src/components/BestArticles";
 
 export default function CommunityPage() {
-  const [articles, setArticles] = useState([]);
-  const [bestArticles, setBestArticles] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [keyword, setKeyword] = useState("");
   const [sort, setSort] = useState("recent");
-  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    async function loadBest() {
-      try {
-        const data = await getBestArticles();
-        setBestArticles(data?.articles || []);
-      } catch (err) {
-        console.error("베스트 게시글 로드 실패:", err.message);
-      }
-    }
-    loadBest();
-  }, []);
+  const { data: bestData } = useQuery({
+    queryKey: ["bestArticles"],
+    queryFn: getBestArticles,
+  });
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["articles", keyword, sort],
+    queryFn: () => getArticles({ keyword, sort, limit: 10 }),
+  });
+
+  const bestArticles = (bestData?.list || []).slice(0, 3);
+  const articles = data?.list || [];
+
+  function handleSearch(e) {
+    if (e.key === "Enter") {
       setKeyword(searchText);
-    }, 400);
-    return () => clearTimeout(timer);
-  }, [searchText]);
-
-  useEffect(() => {
-    async function loadArticles() {
-      try {
-        setLoading(true);
-        const data = await getArticles({ keyword, sort, limit: 10 });
-        setArticles(data?.articles || []);
-      } catch (err) {
-        alert("게시글 로드 실패: " + err.message);
-      } finally {
-        setLoading(false);
-      }
     }
-    loadArticles();
-  }, [keyword, sort]);
+  }
 
   return (
     <main className="mx-auto max-w-[1200px] px-6 py-8">
@@ -72,6 +55,7 @@ export default function CommunityPage() {
               placeholder="검색할 게시글을 입력해주세요"
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
+              onKeyDown={handleSearch}
             />
           </div>
 
@@ -81,12 +65,18 @@ export default function CommunityPage() {
             onChange={(e) => setSort(e.target.value)}
           >
             <option value="recent">최신순</option>
-            <option value="oldest">오래된순</option>
+            <option value="like">좋아요순</option>
           </select>
         </div>
 
-        {loading ? (
-          <div className="py-10 text-center text-gray-400">게시글을 불러오는 중입니다...</div>
+        {isLoading ? (
+          <div className="py-10 text-center text-gray-400">
+            게시글을 불러오는 중입니다...
+          </div>
+        ) : isError ? (
+          <div className="py-10 text-center text-red-400">
+            게시글을 불러오지 못했습니다.
+          </div>
         ) : articles.length > 0 ? (
           <div className="flex flex-col">
             {articles.map((article) => (
@@ -94,7 +84,9 @@ export default function CommunityPage() {
             ))}
           </div>
         ) : (
-          <div className="py-10 text-center text-gray-400">게시글이 없습니다.</div>
+          <div className="py-10 text-center text-gray-400">
+            게시글이 없습니다.
+          </div>
         )}
       </section>
     </main>

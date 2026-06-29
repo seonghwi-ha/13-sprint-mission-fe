@@ -1,45 +1,33 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 import { getProducts } from "../../src/api/productApi";
 import ProductCard from "../../src/components/ProductCard";
 import Pagination from "../../src/components/Pagination";
 
 export default function ItemsPage() {
   const router = useRouter();
-  const [products, setProducts] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [keyword, setKeyword] = useState("");
   const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [loading, setLoading] = useState(false);
-
   const limit = 10;
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["products", page, keyword],
+    queryFn: () => getProducts({ page, limit, keyword, sort: "recent" }),
+  });
+
+  const products = data?.list || [];
+  const totalPages = Math.ceil((data?.totalCount ?? 0) / limit) || 1;
+
+  function handleSearch(e) {
+    if (e.key === "Enter") {
       setKeyword(searchText);
       setPage(1);
-    }, 400);
-    return () => clearTimeout(timer);
-  }, [searchText]);
-
-  useEffect(() => {
-    async function loadProducts() {
-      try {
-        setLoading(true);
-        const data = await getProducts({ page, limit, keyword, sort: "recent" });
-        setProducts(data.products || []);
-        setTotalPages(Math.ceil((data.count ?? 0) / limit) || 1);
-      } catch (err) {
-        alert("상품 로드 실패: " + err.message);
-      } finally {
-        setLoading(false);
-      }
     }
-    loadProducts();
-  }, [page, keyword]);
+  }
 
   return (
     <main className="mx-auto max-w-[1200px] px-6 py-8">
@@ -56,6 +44,7 @@ export default function ItemsPage() {
                 placeholder="검색할 상품을 입력해주세요"
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
+                onKeyDown={handleSearch}
               />
             </div>
 
@@ -67,14 +56,23 @@ export default function ItemsPage() {
               상품 등록하기
             </button>
 
-            <select className="h-[42px] rounded-xl border border-gray-200 bg-white px-4 text-[15px]" defaultValue="recent">
+            <select
+              className="h-[42px] rounded-xl border border-gray-200 bg-white px-4 text-[15px]"
+              defaultValue="recent"
+            >
               <option value="recent">최신순</option>
             </select>
           </div>
         </div>
 
-        {loading ? (
-          <div className="py-10 text-center text-gray-400">상품을 불러오는 중입니다...</div>
+        {isLoading ? (
+          <div className="py-10 text-center text-gray-400">
+            상품을 불러오는 중입니다...
+          </div>
+        ) : isError ? (
+          <div className="py-10 text-center text-red-400">
+            상품을 불러오지 못했습니다.
+          </div>
         ) : products.length > 0 ? (
           <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-5">
             {products.map((product) => (
@@ -82,10 +80,16 @@ export default function ItemsPage() {
             ))}
           </div>
         ) : (
-          <div className="py-10 text-center text-gray-400">등록된 상품이 없습니다.</div>
+          <div className="py-10 text-center text-gray-400">
+            등록된 상품이 없습니다.
+          </div>
         )}
 
-        <Pagination currentPage={page} totalPages={totalPages} onChange={setPage} />
+        <Pagination
+          currentPage={page}
+          totalPages={totalPages}
+          onChange={setPage}
+        />
       </section>
     </main>
   );

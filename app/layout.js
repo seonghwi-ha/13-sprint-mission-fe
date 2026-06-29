@@ -1,5 +1,6 @@
-import Gnb from "../src/components/Gnb";
-import Footer from "../src/components/Footer";
+import ConditionalLayout from "../src/components/ConditionalLayout";
+import QueryProvider from "../src/components/QueryProvider";
+import { AuthProvider } from "../src/context/AuthContext";
 import "../src/styles/globals.css";
 
 export const metadata = {
@@ -11,9 +12,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ko">
       <body className="min-h-screen bg-white font-pretendard text-gray-700">
-        <Gnb />
-        {children}
-        <Footer />
+        <QueryProvider>
+          <AuthProvider>
+            <ConditionalLayout>{children}</ConditionalLayout>
+          </AuthProvider>
+        </QueryProvider>
       </body>
     </html>
   );

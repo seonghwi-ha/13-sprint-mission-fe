@@ -21,7 +21,9 @@ export default function BestArticles({ articles = [] }) {
                 🏅 Best
               </div>
               <div className="flex min-h-20 items-start justify-between gap-3">
-                <h3 className="text-lg font-semibold text-gray-800">{article.title}</h3>
+                <h3 className="text-lg font-semibold text-gray-800">
+                  {article.title}
+                </h3>
                 <img
                   className="h-[72px] w-[72px] shrink-0 rounded-lg bg-gray-200 object-cover"
                   src="/image/default-article.png"
@@ -32,7 +34,7 @@ export default function BestArticles({ articles = [] }) {
                 />
               </div>
               <div className="mt-3 flex gap-3 text-sm text-gray-400">
-                <span>판다러버</span>
+                <span>{article.writer?.nickname || "익명"}</span>
                 <span>{date}</span>
               </div>
             </Link>
