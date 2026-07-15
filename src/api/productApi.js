@@ -62,7 +62,13 @@ export async function getProduct(id) {
   return request(`/products/${id}`);
 }
 
-export async function createProduct({ name, description, price, tags, images }) {
+export async function createProduct({
+  name,
+  description,
+  price,
+  tags,
+  images,
+}) {
   return request("/products", {
     method: "POST",
     body: JSON.stringify({ name, description, price, tags, images }),

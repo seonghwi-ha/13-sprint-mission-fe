@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import { useProductForm } from "../../src/hooks/useProductForm";
 import { createProduct, uploadImages } from "../../src/api/productApi";
 
-const inputBase = "w-full rounded-xl bg-gray-100 px-6 py-4 text-base outline-none";
+const inputBase =
+  "w-full rounded-xl bg-gray-100 px-6 py-4 text-base outline-none";
 const inputError = "border border-red-500 bg-red-50";
 
 export default function RegistrationPage() {
@@ -71,7 +72,9 @@ export default function RegistrationPage() {
     <main className="mx-auto max-w-[1200px] px-6 py-8">
       <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
         <div className="mb-2 flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between">
-          <h1 className="text-2xl font-bold text-gray-800 md:text-[28px]">상품 등록하기</h1>
+          <h1 className="text-2xl font-bold text-gray-800 md:text-[28px]">
+            상품 등록하기
+          </h1>
           <button
             className="h-[42px] w-full rounded-lg bg-panda-primary px-7 font-semibold text-white transition hover:bg-panda-hover active:bg-panda-active disabled:cursor-not-allowed disabled:bg-gray-400 md:w-auto"
             type="submit"
@@ -97,7 +100,11 @@ export default function RegistrationPage() {
 
             {previewUrl && (
               <div className="relative h-40 w-40 overflow-hidden rounded-xl">
-                <img src={previewUrl} alt="미리보기" className="h-full w-full object-cover" />
+                <img
+                  src={previewUrl}
+                  alt="미리보기"
+                  className="h-full w-full object-cover"
+                />
                 <button
                   type="button"
                   onClick={handleRemoveImage}
@@ -124,11 +131,16 @@ export default function RegistrationPage() {
             placeholder="상품명을 입력해주세요"
             className={`${inputBase} ${errors.name ? inputError : ""}`}
           />
-          {errors.name && <p className="mt-0.5 text-[13px] text-red-500">{errors.name}</p>}
+          {errors.name && (
+            <p className="mt-0.5 text-[13px] text-red-500">{errors.name}</p>
+          )}
         </div>
 
         <div className="flex flex-col gap-3">
-          <label className="text-lg font-bold text-gray-800" htmlFor="description">
+          <label
+            className="text-lg font-bold text-gray-800"
+            htmlFor="description"
+          >
             상품 소개 <span className="ml-0.5 text-panda-primary">*</span>
           </label>
           <textarea
@@ -140,7 +152,11 @@ export default function RegistrationPage() {
             placeholder="상품 소개를 입력해주세요"
             className={`${inputBase} min-h-[200px] resize-y ${errors.description ? inputError : ""}`}
           />
-          {errors.description && <p className="mt-0.5 text-[13px] text-red-500">{errors.description}</p>}
+          {errors.description && (
+            <p className="mt-0.5 text-[13px] text-red-500">
+              {errors.description}
+            </p>
+          )}
         </div>
 
         <div className="flex flex-col gap-3">
@@ -158,11 +174,15 @@ export default function RegistrationPage() {
             placeholder="판매 가격을 입력해주세요"
             className={`${inputBase} ${errors.price ? inputError : ""}`}
           />
-          {errors.price && <p className="mt-0.5 text-[13px] text-red-500">{errors.price}</p>}
+          {errors.price && (
+            <p className="mt-0.5 text-[13px] text-red-500">{errors.price}</p>
+          )}
         </div>
 
         <div className="flex flex-col gap-3">
-          <label className="text-lg font-bold text-gray-800" htmlFor="tag">태그</label>
+          <label className="text-lg font-bold text-gray-800" htmlFor="tag">
+            태그
+          </label>
           <input
             id="tag"
             name="tag"
@@ -172,12 +192,17 @@ export default function RegistrationPage() {
             placeholder="태그를 입력 후 엔터를 누르세요 (5글자 이내)"
             className={`${inputBase} ${errors.tag ? inputError : ""}`}
           />
-          {errors.tag && <p className="mt-0.5 text-[13px] text-red-500">{errors.tag}</p>}
+          {errors.tag && (
+            <p className="mt-0.5 text-[13px] text-red-500">{errors.tag}</p>
+          )}
 
           {tags.length > 0 && (
             <div className="mt-1 flex flex-wrap gap-2">
               {tags.map((tag) => (
-                <span key={tag} className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-3.5 py-1.5 text-sm font-medium text-panda-primary">
+                <span
+                  key={tag}
+                  className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-3.5 py-1.5 text-sm font-medium text-panda-primary"
+                >
                   #{tag}
                   <button
                     type="button"

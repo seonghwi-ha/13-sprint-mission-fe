@@ -122,7 +122,9 @@ export default function ItemEditPage() {
           </label>
         </div>
         <p className="mt-2 text-xs text-gray-400">
-          {previewUrl ? "새 이미지로 변경됩니다." : "이미지를 선택하면 교체됩니다."}
+          {previewUrl
+            ? "새 이미지로 변경됩니다."
+            : "이미지를 선택하면 교체됩니다."}
         </p>
       </div>
 

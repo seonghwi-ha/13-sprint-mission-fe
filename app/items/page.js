@@ -52,7 +52,9 @@ export default function ItemsPage() {
             ))}
           </div>
         ) : (
-          <p className="py-6 text-center text-gray-400">베스트 상품이 없습니다.</p>
+          <p className="py-6 text-center text-gray-400">
+            베스트 상품이 없습니다.
+          </p>
         )}
       </section>
 
