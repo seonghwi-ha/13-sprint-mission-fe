@@ -4,12 +4,12 @@
 
 | 구분 | 주소 |
 |---|---|
-| 프론트엔드 (Vercel) | (배포 후 기재) |
+| 프론트엔드 (Vercel) | `https://13-sprint-mission-fe-gilt.vercel.app` |
 | 연결된 백엔드 API | `http://54.180.25.232` (AWS EC2) |
 
 ## 요구사항 체크리스트
 
-- [ ] AWS Amplify 혹은 Vercel을 활용해 배포
+- [x] AWS Amplify 혹은 Vercel을 활용해 배포 — Vercel
 - [x] AWS에 배포된 백엔드 주소에 맞게 API 주소 변경
   - 코드는 환경 변수 기반이라 값 교체만으로 전환됩니다
   - HTTPS ↔ HTTP 혼합 문제를 프록시로 해결 (아래 참고)
